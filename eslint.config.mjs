@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Vendored WASM codec bundles copied from node_modules by
+    // scripts/copy-codecs.mjs. Generated, minified, and gitignored —
+    // linting them only produces noise from third-party code.
+    "public/codecs/**",
   ]),
 ]);
 
