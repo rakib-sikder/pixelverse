@@ -13,6 +13,13 @@
 
 import { FORMATS, type FormatId } from "../../formats";
 
+/**
+ * Served as a static asset by `scripts/copy-codecs.mjs`, not bundled.
+ * Held in a variable so TypeScript resolves the *types* from node_modules while
+ * the runtime import resolves against the site's origin.
+ */
+const HEIC_CODEC_URL = "/codecs/libheif-bundle.mjs";
+
 function orThrow(image: ImageData | null, format: FormatId): ImageData {
   if (!image) throw new Error(`This ${FORMATS[format].label} file could not be decoded.`);
   return image;
@@ -52,14 +59,18 @@ export async function decodeToImageData(bytes: ArrayBuffer, format: FormatId): P
 }
 
 /**
- * HEIC via libheif. We use the pre-bundled wasm build, which inlines the binary
- * rather than fetching a sibling `.wasm` — the plain build's runtime fetch does
- * not survive bundling into a worker chunk.
+ * HEIC via libheif.
+ *
+ * Loaded from `/codecs/` at runtime rather than imported, deliberately. The
+ * libheif bundle is 1.4 MB of minified emscripten with its wasm inlined as
+ * base64; putting it through the bundler stalls the build for minutes and
+ * produces nothing better. The ignore comments tell webpack and Turbopack to
+ * leave this import alone so it resolves in the browser instead.
  */
 async function decodeHeic(bytes: ArrayBuffer): Promise<ImageData> {
-  const { default: libheifFactory } = await import(
-    "libheif-js/libheif-wasm/libheif-bundle.mjs"
-  );
+  const { default: libheifFactory } = (await import(
+    /* webpackIgnore: true */ /* turbopackIgnore: true */ HEIC_CODEC_URL
+  )) as typeof import("libheif-js/libheif-wasm/libheif-bundle.mjs");
   const libheif = await libheifFactory();
 
   const decoder = new libheif.HeifDecoder();

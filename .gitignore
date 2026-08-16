@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Codecs copied from node_modules by scripts/copy-codecs.mjs
+/public/codecs
+
+# Freelance planning notes — not part of the project
+/_freelance
