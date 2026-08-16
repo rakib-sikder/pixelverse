@@ -1,7 +1,7 @@
 import { ShieldCheck } from "lucide-react";
 import { Converter } from "@/components/converter";
 
-const REPO_URL = "https://github.com/rakib/pixelverse";
+const REPO_URL = "https://github.com/rakib-sikder/pixelverse";
 
 export default function Home() {
   return (
