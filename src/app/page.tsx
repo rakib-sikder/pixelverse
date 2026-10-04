@@ -23,7 +23,7 @@ export default function Home() {
         </p>
       </div>
 
-      <Converter />
+      <Converter afterResults={<NativeBreak className="mt-2" />} />
 
       <BannerBreak className="mt-12" />
 
@@ -53,8 +53,6 @@ export default function Home() {
           ))}
         </ul>
       </section>
-
-      <NativeBreak className="mt-16" />
     </main>
   );
 }

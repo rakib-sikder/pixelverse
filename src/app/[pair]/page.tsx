@@ -59,7 +59,7 @@ export default async function ConversionPage({ params }: PageProps<"/[pair]">) {
 
       {/* The converter opens on this page's target, so the format someone came
           here for is already selected when they drop a file in. */}
-      <Converter target={conversion.to} />
+      <Converter target={conversion.to} afterResults={<NativeBreak className="mt-2" />} />
 
       <BannerBreak className="mt-12" />
 
@@ -90,8 +90,6 @@ export default async function ConversionPage({ params }: PageProps<"/[pair]">) {
           ))}
         </dl>
       </section>
-
-      <NativeBreak className="mt-16" />
 
       {/* Repeats the questions above in the form search engines read, which is
           what can put them in the result itself rather than behind a click. */}

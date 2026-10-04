@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { Download, Loader2, Sparkles, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -18,9 +18,15 @@ type ConverterProps = {
   /** Preselects the output format, so a landing page opens on the conversion
       it is about rather than on the default. */
   target?: FormatId;
+  /**
+   * Rendered once something has converted. Attention peaks between the
+   * "it worked" line and the download button, and nothing else on the page
+   * gets looked at as deliberately.
+   */
+  afterResults?: ReactNode;
 };
 
-export function Converter({ target }: ConverterProps = {}) {
+export function Converter({ target, afterResults }: ConverterProps = {}) {
   const items = useConverterStore((s) => s.items);
   const setTarget = useConverterStore((s) => s.setTarget);
   const isConverting = useConverterStore((s) => s.isConverting);
@@ -109,6 +115,8 @@ export function Converter({ target }: ConverterProps = {}) {
             ) : null}
           </p>
         ) : null}
+
+        {done.length > 0 ? afterResults : null}
       </div>
 
       {/* Sticky so the settings stay reachable while scrolling a long queue. */}
