@@ -108,7 +108,7 @@ Visitor counts come from Vercel Analytics — `<Analytics />` sits in the root
 layout, and daily, weekly and monthly numbers appear under the project's
 Analytics tab. Nothing to configure.
 
-Three Adsterra units are wired up, each rendering only when its variable is set:
+Four Adsterra units are wired up, each rendering only when its variable is set:
 
 ```bash
 # .env.local — gitignored. Set the same variables in the Vercel project.
@@ -116,6 +116,7 @@ NEXT_PUBLIC_ADSTERRA_BANNER_WIDE=https://<publisher-domain>/22/<728x90-key>
 NEXT_PUBLIC_ADSTERRA_BANNER_NARROW=https://<publisher-domain>/22/<320x50-key>
 NEXT_PUBLIC_ADSTERRA_NATIVE=https://<publisher-domain>/21/<key>
 NEXT_PUBLIC_ADSTERRA_SOCIAL_BAR=https://<publisher-domain>/1/<key>
+NEXT_PUBLIC_ADSTERRA_POPUNDER=https://<publisher-domain>/14/<key>
 
 # Optional. NEXT_PUBLIC_SITE_URL overrides the origin used for canonical links
 # and the sitemap, which a custom domain needs; without it Vercel's production
@@ -139,10 +140,10 @@ locally — the page renders ad-free.
 The two display banners are one unit per size, because Adsterra has no
 responsive banner. The slot loads only the one matching the viewport: both
 rendered with one hidden would still load it and bill an impression nobody
-could see, which is how publisher accounts get closed. The social bar attaches to the whole page instead of a
-slot, so it lives in the layout. A popunder unit exists on the account and is
-deliberately not wired up — answering any click anywhere with another site
-reads as the tool breaking.
+could see, which is how publisher accounts get closed. The social bar and the
+popunder attach to the whole page instead of a slot, so they live in the
+layout. The popunder answers a click anywhere with another site, which is worth
+knowing before it is switched on.
 
 Ads serve only on a domain Adsterra has approved, and the loader domains are
 widely blocked by adblockers and some ISPs, so an empty slot locally usually

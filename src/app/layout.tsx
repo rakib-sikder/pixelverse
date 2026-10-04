@@ -74,10 +74,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Toaster position="bottom-right" />
         <Analytics />
 
-        {/* The social bar floats over the layout, so it has no slot in the page
-            to sit in. It loads after hydration so the converter is usable
-            before any of it runs, and opts out of Cloudflare Rocket Loader the
-            way Adsterra's own snippet does — rewriting it breaks the fill. */}
+        {/* The social bar floats over the layout and the popunder opens its own
+            window, so neither has a slot in the page to sit in. They load after
+            hydration so the converter is usable before any of this runs, and
+            opt out of Cloudflare Rocket Loader the way Adsterra's own snippets
+            do — rewriting them breaks the fill. */}
         {SITEWIDE_AD_SRCS.map((src) => (
           <Script key={src} src={src} strategy="afterInteractive" data-cfasync="false" />
         ))}
