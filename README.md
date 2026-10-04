@@ -108,7 +108,7 @@ Visitor counts come from Vercel Analytics — `<Analytics />` sits in the root
 layout, and daily, weekly and monthly numbers appear under the project's
 Analytics tab. Nothing to configure.
 
-Four Adsterra units are wired up, each rendering only when its variable is set:
+Four Adsterra units plus the Monetag Multitag are wired up, each rendering only when its variable is set:
 
 ```bash
 # .env.local — gitignored. Set the same variables in the Vercel project.
@@ -117,6 +117,8 @@ NEXT_PUBLIC_ADSTERRA_BANNER_NARROW=https://<publisher-domain>/22/<320x50-key>
 NEXT_PUBLIC_ADSTERRA_NATIVE=https://<publisher-domain>/21/<key>
 NEXT_PUBLIC_ADSTERRA_SOCIAL_BAR=https://<publisher-domain>/1/<key>
 NEXT_PUBLIC_ADSTERRA_POPUNDER=https://<publisher-domain>/14/<key>
+NEXT_PUBLIC_MONETAG_SRC=https://<monetag-domain>/88/tag.min.js
+NEXT_PUBLIC_MONETAG_ZONE=<zone-id>
 
 # Optional. NEXT_PUBLIC_SITE_URL overrides the origin used for canonical links
 # and the sitemap, which a custom domain needs; without it Vercel's production
@@ -144,6 +146,12 @@ could see, which is how publisher accounts get closed. The social bar and the
 popunder attach to the whole page instead of a slot, so they live in the
 layout. The popunder answers a click anywhere with another site, which is worth
 knowing before it is switched on.
+
+Adsterra and Monetag run side by side; neither demands exclusivity. The one
+overlap to watch is the popunder — Adsterra has one and the Monetag zone may run
+one too, so a single click could open two windows. Turn the popunder off in one
+of them (either unset NEXT_PUBLIC_ADSTERRA_POPUNDER, or disable that format on
+the Monetag zone).
 
 Ads serve only on a domain Adsterra has approved, and the loader domains are
 widely blocked by adblockers and some ISPs, so an empty slot locally usually

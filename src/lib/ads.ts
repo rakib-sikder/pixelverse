@@ -56,3 +56,14 @@ export const SITEWIDE_AD_SRCS = [
   process.env.NEXT_PUBLIC_ADSTERRA_SOCIAL_BAR,
   process.env.NEXT_PUBLIC_ADSTERRA_POPUNDER,
 ].filter((src): src is string => Boolean(src));
+
+/**
+ * Monetag's Multitag — one loader that runs several Monetag formats at once
+ * (push via the /sw.js at the site root, plus whatever else the zone has
+ * enabled in the dashboard). Which formats it runs is set on Monetag's side,
+ * not here. Unlike the units above it carries a zone id as an attribute rather
+ * than in the URL, so it is its own value, not a member of SITEWIDE_AD_SRCS.
+ */
+const monetagSrc = process.env.NEXT_PUBLIC_MONETAG_SRC;
+const monetagZone = process.env.NEXT_PUBLIC_MONETAG_ZONE;
+export const MONETAG = monetagSrc && monetagZone ? { src: monetagSrc, zone: monetagZone } : null;

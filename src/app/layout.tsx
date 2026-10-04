@@ -6,7 +6,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { SITEWIDE_AD_SRCS } from "@/lib/ads";
+import { MONETAG, SITEWIDE_AD_SRCS } from "@/lib/ads";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
@@ -82,6 +82,18 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {SITEWIDE_AD_SRCS.map((src) => (
           <Script key={src} src={src} strategy="afterInteractive" data-cfasync="false" />
         ))}
+
+        {/* Monetag Multitag: registers the /sw.js push worker and runs the other
+            formats enabled on the zone. Same afterInteractive timing and Rocket
+            Loader opt-out as above. */}
+        {MONETAG && (
+          <Script
+            src={MONETAG.src}
+            data-zone={MONETAG.zone}
+            data-cfasync="false"
+            strategy="afterInteractive"
+          />
+        )}
       </body>
     </html>
   );
