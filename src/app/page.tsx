@@ -23,7 +23,7 @@ export default function Home() {
         </p>
       </div>
 
-      <Converter afterResults={<NativeBreak className="mt-2" />} />
+      <Converter />
 
       <BannerBreak className="mt-12" />
 
@@ -53,6 +53,12 @@ export default function Home() {
           ))}
         </ul>
       </section>
+
+      {/* Always on, not gated behind a conversion: the home page has a tall blank
+          lower half, and the native banner is the unit that fills it without
+          reading as a billboard. One native per page — the loader fills a
+          container keyed by the unit id, so a second would leave both empty. */}
+      <NativeBreak className="mt-16" />
     </main>
   );
 }
