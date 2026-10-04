@@ -3,8 +3,7 @@
 Convert, resize and compress images in the browser. Nothing is uploaded — the
 files never leave the machine they were opened on.
 
-<!-- TODO: add the Vercel URL here once the first deploy is live. -->
-**Live demo** — _deploying_ · **[Source](https://github.com/rakib-sikder/pixelverse)**
+**Live demo** — **[pixelverse-three.vercel.app](https://pixelverse-three.vercel.app)** · **[Source](https://github.com/rakib-sikder/pixelverse)**
 
 ---
 
