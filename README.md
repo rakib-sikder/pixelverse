@@ -103,6 +103,29 @@ npm test            # vitest — 145 tests
 npm run build       # production build
 ```
 
+## Ads and analytics
+
+Visitor counts come from Vercel Analytics — `<Analytics />` sits in the root
+layout, and daily, weekly and monthly numbers appear under the project's
+Analytics tab once the site is deployed. Nothing to configure.
+
+The banner below the converter is an Adsterra display unit, and it renders only
+when `NEXT_PUBLIC_ADSTERRA_BANNER_KEY` is set:
+
+```bash
+# .env.local — gitignored. Set the same variable in the Vercel project.
+NEXT_PUBLIC_ADSTERRA_BANNER_KEY=your-ad-unit-key
+```
+
+The key stays out of the repo because this one is public: a key pasted onto a
+spam site gets the publisher account banned, not the thief. Unset — the default
+locally — the page renders ad-free.
+
+One key is bound to one size in the Adsterra dashboard, so `width` and `height`
+in `lib/ads.ts` must match the unit the key was created with, and a mobile size
+needs a second key. Ads serve only on a domain Adsterra has approved, so the
+slot stays blank on localhost and on preview deploys.
+
 ## A note on the build
 
 `npm run build` passes `--webpack` deliberately.

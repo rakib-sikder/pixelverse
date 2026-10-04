@@ -1,5 +1,7 @@
 import { ShieldCheck } from "lucide-react";
+import { AdSlot } from "@/components/ad-slot";
 import { Converter } from "@/components/converter";
+import { BANNER_AD } from "@/lib/ads";
 
 const REPO_URL = "https://github.com/rakib-sikder/pixelverse";
 
@@ -44,6 +46,15 @@ export default function Home() {
         </div>
 
         <Converter />
+
+        {BANNER_AD && (
+          <AdSlot
+            adKey={BANNER_AD.key}
+            width={BANNER_AD.width}
+            height={BANNER_AD.height}
+            className="mt-12"
+          />
+        )}
       </main>
 
       <footer className="border-t border-border">
