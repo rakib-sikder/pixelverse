@@ -116,7 +116,7 @@ NEXT_PUBLIC_ADSTERRA_BANNER_WIDE=https://<publisher-domain>/22/<728x90-key>
 NEXT_PUBLIC_ADSTERRA_BANNER_NARROW=https://<publisher-domain>/22/<320x50-key>
 NEXT_PUBLIC_ADSTERRA_NATIVE=https://<publisher-domain>/21/<key>
 NEXT_PUBLIC_ADSTERRA_SOCIAL_BAR=https://<publisher-domain>/1/<key>
-NEXT_PUBLIC_ADSTERRA_POPUNDER=https://<publisher-domain>/14/<key>
+
 ```
 
 Each holds the loader URL from the dashboard snippet, not just the key. **The
@@ -133,9 +133,10 @@ locally — the page renders ad-free.
 The two display banners are one unit per size, because Adsterra has no
 responsive banner. The slot loads only the one matching the viewport: both
 rendered with one hidden would still load it and bill an impression nobody
-could see, which is how publisher accounts get closed. The social bar and
-popunder attach to the whole page instead of a slot, so they live in the
-layout.
+could see, which is how publisher accounts get closed. The social bar attaches to the whole page instead of a
+slot, so it lives in the layout. A popunder unit exists on the account and is
+deliberately not wired up — answering any click anywhere with another site
+reads as the tool breaking.
 
 Ads serve only on a domain Adsterra has approved, and the loader domains are
 widely blocked by adblockers and some ISPs, so an empty slot locally usually

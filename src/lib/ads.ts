@@ -44,10 +44,12 @@ export const NATIVE_AD = nativeSrc && nativeKey ? { src: nativeSrc, key: nativeK
 
 /**
  * Units that attach to the whole page rather than to a slot in it — the social
- * bar floats over the layout and the popunder opens its own window, so neither
- * has a place in the document to sit.
+ * bar floats over the layout, so it has no place in the document to sit.
+ *
+ * The popunder was here and was taken out: it answered any click anywhere on
+ * the page by opening another site, which on a tool people come to with a job
+ * in hand reads as the site breaking rather than as an ad.
  */
-export const SITEWIDE_AD_SRCS = [
-  process.env.NEXT_PUBLIC_ADSTERRA_SOCIAL_BAR,
-  process.env.NEXT_PUBLIC_ADSTERRA_POPUNDER,
-].filter((src): src is string => Boolean(src));
+export const SITEWIDE_AD_SRCS = [process.env.NEXT_PUBLIC_ADSTERRA_SOCIAL_BAR].filter(
+  (src): src is string => Boolean(src),
+);
