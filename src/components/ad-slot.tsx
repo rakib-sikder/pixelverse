@@ -20,7 +20,7 @@ const WIDE_FROM = "(min-width: 48rem)";
  * then Adsterra's loader. The loader runs during the iframe's own parse, so a
  * `document.write` in it lands in an open document rather than wiping the page.
  */
-function documentFor(unit: AdUnit): string {
+export function documentFor(unit: AdUnit): string {
   const options = JSON.stringify({
     key: unit.key,
     format: "iframe",

@@ -37,6 +37,15 @@ const narrow = unit(process.env.NEXT_PUBLIC_ADSTERRA_BANNER_NARROW, 320, 50);
  */
 export const BANNER_ADS = wide && narrow ? { wide, narrow } : null;
 
+/**
+ * Vertical skyscraper for the wide-screen side gutters. One key fills both rails
+ * because each rail is its own iframe (see SideRail), so the shared global the
+ * banners once fought over is not an issue here. 728x90 and 320x50 cannot stand
+ * in — Adsterra serves the size the key was made with, so a wide unit in a
+ * narrow rail renders broken. Needs its own 160x600 unit.
+ */
+export const SKYSCRAPER_AD = unit(process.env.NEXT_PUBLIC_ADSTERRA_SKYSCRAPER, 160, 600);
+
 /** Native banner. Its loader fills a div whose id is the unit key, prefixed. */
 const nativeSrc = process.env.NEXT_PUBLIC_ADSTERRA_NATIVE;
 const nativeKey = nativeSrc && keyOf(nativeSrc);

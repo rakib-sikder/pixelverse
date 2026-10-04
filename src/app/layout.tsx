@@ -5,8 +5,9 @@ import { Analytics } from "@vercel/analytics/next";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { SiteFooter } from "@/components/site-footer";
+import { SideRail } from "@/components/side-rail";
 import { SiteHeader } from "@/components/site-header";
-import { MONETAG, SITEWIDE_AD_SRCS } from "@/lib/ads";
+import { MONETAG, SITEWIDE_AD_SRCS, SKYSCRAPER_AD } from "@/lib/ads";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
@@ -66,6 +67,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        {/* Skyscrapers in the wide-screen side gutters; hidden where there is no
+            room. One unit, two iframes. */}
+        {SKYSCRAPER_AD && (
+          <>
+            <SideRail unit={SKYSCRAPER_AD} side="left" />
+            <SideRail unit={SKYSCRAPER_AD} side="right" />
+          </>
+        )}
         <TooltipProvider delay={200}>
           <SiteHeader />
           {children}
