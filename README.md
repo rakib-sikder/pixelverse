@@ -109,21 +109,24 @@ layout, and daily, weekly and monthly numbers appear under the project's
 Analytics tab once the site is deployed. Nothing to configure.
 
 The banner below the converter is an Adsterra display unit, and it renders only
-when `NEXT_PUBLIC_ADSTERRA_BANNER_KEY` is set:
+when both sizes are configured:
 
 ```bash
-# .env.local — gitignored. Set the same variable in the Vercel project.
-NEXT_PUBLIC_ADSTERRA_BANNER_KEY=your-ad-unit-key
+# .env.local — gitignored. Set the same variables in the Vercel project.
+NEXT_PUBLIC_ADSTERRA_BANNER_WIDE=https://<publisher-domain>/22/<728x90-key>
+NEXT_PUBLIC_ADSTERRA_BANNER_NARROW=https://<publisher-domain>/22/<320x50-key>
 ```
 
 The key stays out of the repo because this one is public: a key pasted onto a
 spam site gets the publisher account banned, not the thief. Unset — the default
 locally — the page renders ad-free.
 
-One key is bound to one size in the Adsterra dashboard, so `width` and `height`
-in `lib/ads.ts` must match the unit the key was created with, and a mobile size
-needs a second key. Ads serve only on a domain Adsterra has approved, so the
-slot stays blank on localhost and on preview deploys.
+An Adsterra display banner is a fixed size, so desktop and phone are two
+separate units, and the slot loads only the one that matches the viewport —
+rendering both and hiding one would still bill an unseeable impression. The
+loader domain is per-publisher and is not interchangeable between accounts.
+Ads serve only on a domain Adsterra has approved, so the slot stays blank on
+localhost and on preview deploys.
 
 ## A note on the build
 
