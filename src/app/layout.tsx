@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { SITEWIDE_AD_SRCS } from "@/lib/ads";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -48,6 +50,15 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <TooltipProvider delay={200}>{children}</TooltipProvider>
         <Toaster position="bottom-right" />
         <Analytics />
+
+        {/* The social bar floats over the layout and the popunder opens its own
+            window, so neither has a slot in the page to sit in. They load after
+            hydration so the converter is usable before any of this runs, and
+            opt out of Cloudflare Rocket Loader the way Adsterra's own snippets
+            do — rewriting them breaks the fill. */}
+        {SITEWIDE_AD_SRCS.map((src) => (
+          <Script key={src} src={src} strategy="afterInteractive" data-cfasync="false" />
+        ))}
       </body>
     </html>
   );

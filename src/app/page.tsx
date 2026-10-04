@@ -1,7 +1,8 @@
 import { ShieldCheck } from "lucide-react";
 import { AdSlot } from "@/components/ad-slot";
 import { Converter } from "@/components/converter";
-import { BANNER_ADS } from "@/lib/ads";
+import { NativeAd } from "@/components/native-ad";
+import { BANNER_ADS, NATIVE_AD } from "@/lib/ads";
 
 const REPO_URL = "https://github.com/rakib-sikder/pixelverse";
 
@@ -49,6 +50,10 @@ export default function Home() {
 
         {BANNER_ADS && (
           <AdSlot wide={BANNER_ADS.wide} narrow={BANNER_ADS.narrow} className="mt-12" />
+        )}
+
+        {NATIVE_AD && (
+          <NativeAd adKey={NATIVE_AD.key} src={NATIVE_AD.src} className="mt-12" />
         )}
       </main>
 

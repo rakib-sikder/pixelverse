@@ -106,27 +106,40 @@ npm run build       # production build
 
 Visitor counts come from Vercel Analytics — `<Analytics />` sits in the root
 layout, and daily, weekly and monthly numbers appear under the project's
-Analytics tab once the site is deployed. Nothing to configure.
+Analytics tab. Nothing to configure.
 
-The banner below the converter is an Adsterra display unit, and it renders only
-when both sizes are configured:
+Four Adsterra units are wired up, each rendering only when its variable is set:
 
 ```bash
 # .env.local — gitignored. Set the same variables in the Vercel project.
 NEXT_PUBLIC_ADSTERRA_BANNER_WIDE=https://<publisher-domain>/22/<728x90-key>
 NEXT_PUBLIC_ADSTERRA_BANNER_NARROW=https://<publisher-domain>/22/<320x50-key>
+NEXT_PUBLIC_ADSTERRA_NATIVE=https://<publisher-domain>/21/<key>
+NEXT_PUBLIC_ADSTERRA_SOCIAL_BAR=https://<publisher-domain>/1/<key>
+NEXT_PUBLIC_ADSTERRA_POPUNDER=https://<publisher-domain>/14/<key>
 ```
 
-The key stays out of the repo because this one is public: a key pasted onto a
-spam site gets the publisher account banned, not the thief. Unset — the default
+Each holds the loader URL from the dashboard snippet, not just the key. **The
+loader domain is per-publisher**, and the shared `highperformanceformat.com`
+address most guides print answers every request with an empty `200` — it fails
+silently, so copy the `src` from the dashboard rather than constructing it. The
+unit key is read off the end of the URL, which is also what `atOptions` and the
+native banner's container id need.
+
+Keys stay out of the repo because this one is public: a key pasted onto a spam
+site gets the publisher account banned, not the thief. Unset — the default
 locally — the page renders ad-free.
 
-An Adsterra display banner is a fixed size, so desktop and phone are two
-separate units, and the slot loads only the one that matches the viewport —
-rendering both and hiding one would still bill an unseeable impression. The
-loader domain is per-publisher and is not interchangeable between accounts.
-Ads serve only on a domain Adsterra has approved, so the slot stays blank on
-localhost and on preview deploys.
+The two display banners are one unit per size, because Adsterra has no
+responsive banner. The slot loads only the one matching the viewport: both
+rendered with one hidden would still load it and bill an impression nobody
+could see, which is how publisher accounts get closed. The social bar and
+popunder attach to the whole page instead of a slot, so they live in the
+layout.
+
+Ads serve only on a domain Adsterra has approved, and the loader domains are
+widely blocked by adblockers and some ISPs, so an empty slot locally usually
+means the network, not the code.
 
 ## A note on the build
 
