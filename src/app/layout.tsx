@@ -51,6 +51,12 @@ export const metadata: Metadata = {
     type: "website",
     siteName: SITE_NAME,
   },
+  // Search Console will not report which queries reach the site until it can
+  // confirm the site is yours. Paste the code from its HTML-tag method into
+  // GOOGLE_SITE_VERIFICATION and the meta tag it wants appears here.
+  verification: process.env.GOOGLE_SITE_VERIFICATION
+    ? { google: process.env.GOOGLE_SITE_VERIFICATION }
+    : undefined,
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

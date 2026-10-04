@@ -102,13 +102,13 @@ npm test            # vitest — 145 tests
 npm run build       # production build
 ```
 
-## Ads and analytics
+## Ads, analytics and search
 
 Visitor counts come from Vercel Analytics — `<Analytics />` sits in the root
 layout, and daily, weekly and monthly numbers appear under the project's
 Analytics tab. Nothing to configure.
 
-Four Adsterra units are wired up, each rendering only when its variable is set:
+Three Adsterra units are wired up, each rendering only when its variable is set:
 
 ```bash
 # .env.local — gitignored. Set the same variables in the Vercel project.
@@ -117,6 +117,12 @@ NEXT_PUBLIC_ADSTERRA_BANNER_NARROW=https://<publisher-domain>/22/<320x50-key>
 NEXT_PUBLIC_ADSTERRA_NATIVE=https://<publisher-domain>/21/<key>
 NEXT_PUBLIC_ADSTERRA_SOCIAL_BAR=https://<publisher-domain>/1/<key>
 
+# Optional. NEXT_PUBLIC_SITE_URL overrides the origin used for canonical links
+# and the sitemap, which a custom domain needs; without it Vercel's production
+# URL is used. GOOGLE_SITE_VERIFICATION holds the code from Search Console's
+# HTML-tag method and renders the meta tag it looks for.
+NEXT_PUBLIC_SITE_URL=https://example.com
+GOOGLE_SITE_VERIFICATION=<code>
 ```
 
 Each holds the loader URL from the dashboard snippet, not just the key. **The
@@ -141,6 +147,15 @@ reads as the tool breaking.
 Ads serve only on a domain Adsterra has approved, and the loader domains are
 widely blocked by adblockers and some ISPs, so an empty slot locally usually
 means the network, not the code.
+
+Search traffic arrives on the conversion pages rather than the home page, since
+nobody searches for "image converter" — they search for the pair in front of
+them. `lib/conversions.ts` is the list, and each entry is one page at the root
+with its own copy, its own canonical and FAQ structured data, opening the
+converter already set to that target. Adding one is an entry in that array:
+the route, the sitemap and the footer links all read from it. Keep the copy
+genuinely different — a dozen near-identical pages rank worse than the one page
+they were split from.
 
 ## A note on the build
 
