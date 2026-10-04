@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Download, Loader2, Sparkles, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -11,10 +11,18 @@ import { FileCard } from "@/components/file-card";
 import { SettingsPanel } from "@/components/settings-panel";
 import { downloadZip } from "@/lib/download";
 import { formatBytes } from "@/lib/engine/router";
+import type { FormatId } from "@/lib/formats";
 import { useConverterStore } from "@/store/use-converter-store";
 
-export function Converter() {
+type ConverterProps = {
+  /** Preselects the output format, so a landing page opens on the conversion
+      it is about rather than on the default. */
+  target?: FormatId;
+};
+
+export function Converter({ target }: ConverterProps = {}) {
   const items = useConverterStore((s) => s.items);
+  const setTarget = useConverterStore((s) => s.setTarget);
   const isConverting = useConverterStore((s) => s.isConverting);
   const addFiles = useConverterStore((s) => s.addFiles);
   const clearAll = useConverterStore((s) => s.clearAll);
@@ -22,6 +30,10 @@ export function Converter() {
   const outputNameFor = useConverterStore((s) => s.outputNameFor);
 
   const [isZipping, setIsZipping] = useState(false);
+
+  useEffect(() => {
+    if (target) setTarget(target);
+  }, [target, setTarget]);
 
   const onFiles = useCallback(
     (files: File[]) => {

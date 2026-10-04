@@ -4,7 +4,10 @@ import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { SiteFooter } from "@/components/site-footer";
+import { SiteHeader } from "@/components/site-header";
 import { SITEWIDE_AD_SRCS } from "@/lib/ads";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -20,10 +23,19 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "PixelVerse — convert any image to any format",
+  // Without this, every canonical and Open Graph URL is relative and search
+  // engines are left to infer the origin — which on a preview deploy means the
+  // preview.
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "PixelVerse — convert any image to any format",
+    // A conversion page names its own format pair, so the suffix is all the
+    // brand it needs.
+    template: `%s · ${SITE_NAME}`,
+  },
   description:
     "Convert between JPEG, PNG, WebP, AVIF, JPEG XL, GIF, BMP, TIFF, ICO, SVG and HEIC. Batch conversion, resizing and compression that runs in your browser — your files are never uploaded.",
-  applicationName: "PixelVerse",
+  applicationName: SITE_NAME,
   keywords: [
     "image converter",
     "webp converter",
@@ -37,6 +49,7 @@ export const metadata: Metadata = {
     description:
       "Batch image conversion, resizing and compression that runs entirely in your browser.",
     type: "website",
+    siteName: SITE_NAME,
   },
 };
 
@@ -47,15 +60,18 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <TooltipProvider delay={200}>{children}</TooltipProvider>
+        <TooltipProvider delay={200}>
+          <SiteHeader />
+          {children}
+          <SiteFooter />
+        </TooltipProvider>
         <Toaster position="bottom-right" />
         <Analytics />
 
-        {/* The social bar floats over the layout and the popunder opens its own
-            window, so neither has a slot in the page to sit in. They load after
-            hydration so the converter is usable before any of this runs, and
-            opt out of Cloudflare Rocket Loader the way Adsterra's own snippets
-            do — rewriting them breaks the fill. */}
+        {/* The social bar floats over the layout, so it has no slot in the page
+            to sit in. It loads after hydration so the converter is usable
+            before any of it runs, and opts out of Cloudflare Rocket Loader the
+            way Adsterra's own snippet does — rewriting it breaks the fill. */}
         {SITEWIDE_AD_SRCS.map((src) => (
           <Script key={src} src={src} strategy="afterInteractive" data-cfasync="false" />
         ))}
