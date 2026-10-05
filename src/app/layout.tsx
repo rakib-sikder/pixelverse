@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { SiteFooter } from "@/components/site-footer";
 import { SideRail } from "@/components/side-rail";
+import { ServiceWorkerCleanup } from "@/components/service-worker-cleanup";
 import { SiteHeader } from "@/components/site-header";
 import { SITEWIDE_AD_SRCS, SKYSCRAPER_AD } from "@/lib/ads";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
@@ -67,6 +68,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <ServiceWorkerCleanup />
         {/* Skyscrapers in the wide-screen side gutters; hidden where there is no
             room. One unit, two iframes. */}
         {SKYSCRAPER_AD && (
