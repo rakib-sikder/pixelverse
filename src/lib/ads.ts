@@ -52,19 +52,17 @@ const nativeKey = nativeSrc && keyOf(nativeSrc);
 export const NATIVE_AD = nativeSrc && nativeKey ? { src: nativeSrc, key: nativeKey } : null;
 
 /**
- * Units that attach to the whole page rather than to a slot in it. The social
- * bar floats over the layout and the popunder opens its own window, so neither
- * has a place in the document to sit.
+ * Units that attach to the whole page rather than to a slot in it — now just
+ * the social bar, which floats over the layout.
  *
- * The popunder answers a click anywhere on the page by opening another site.
- * It was removed once for that and restored on request after the dashboard
- * showed it earning the highest CPM of the five units — on four impressions,
- * which is noise, so the Analytics are what should settle it.
+ * The popunder used to be here and is gone for good: it opened another site on
+ * any click anywhere on the page, which on a tool reads as the page breaking
+ * rather than as an ad. Monetag can run the same format from its own tag, so
+ * that one is turned off on the Monetag side, not here.
  */
-export const SITEWIDE_AD_SRCS = [
-  process.env.NEXT_PUBLIC_ADSTERRA_SOCIAL_BAR,
-  process.env.NEXT_PUBLIC_ADSTERRA_POPUNDER,
-].filter((src): src is string => Boolean(src));
+export const SITEWIDE_AD_SRCS = [process.env.NEXT_PUBLIC_ADSTERRA_SOCIAL_BAR].filter(
+  (src): src is string => Boolean(src),
+);
 
 /**
  * Monetag's Multitag — one loader that runs several Monetag formats at once
