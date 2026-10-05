@@ -7,7 +7,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { SiteFooter } from "@/components/site-footer";
 import { SideRail } from "@/components/side-rail";
 import { SiteHeader } from "@/components/site-header";
-import { MONETAG, SITEWIDE_AD_SRCS, SKYSCRAPER_AD } from "@/lib/ads";
+import { SITEWIDE_AD_SRCS, SKYSCRAPER_AD } from "@/lib/ads";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
@@ -92,17 +92,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <Script key={src} src={src} strategy="afterInteractive" data-cfasync="false" />
         ))}
 
-        {/* Monetag Multitag: registers the /sw.js push worker and runs the other
-            formats enabled on the zone. Same afterInteractive timing and Rocket
-            Loader opt-out as above. */}
-        {MONETAG && (
-          <Script
-            src={MONETAG.src}
-            data-zone={MONETAG.zone}
-            data-cfasync="false"
-            strategy="afterInteractive"
-          />
-        )}
       </body>
     </html>
   );

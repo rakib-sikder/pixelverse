@@ -108,7 +108,7 @@ Visitor counts come from Vercel Analytics — `<Analytics />` sits in the root
 layout, and daily, weekly and monthly numbers appear under the project's
 Analytics tab. Nothing to configure.
 
-Four Adsterra units plus the Monetag Multitag are wired up, each rendering only when its variable is set:
+The Adsterra units are wired up, each rendering only when its variable is set:
 
 ```bash
 # .env.local — gitignored. Set the same variables in the Vercel project.
@@ -116,9 +116,7 @@ NEXT_PUBLIC_ADSTERRA_BANNER_WIDE=https://<publisher-domain>/22/<728x90-key>
 NEXT_PUBLIC_ADSTERRA_BANNER_NARROW=https://<publisher-domain>/22/<320x50-key>
 NEXT_PUBLIC_ADSTERRA_NATIVE=https://<publisher-domain>/21/<key>
 NEXT_PUBLIC_ADSTERRA_SOCIAL_BAR=https://<publisher-domain>/1/<key>
-NEXT_PUBLIC_ADSTERRA_POPUNDER=https://<publisher-domain>/14/<key>
-NEXT_PUBLIC_MONETAG_SRC=https://<monetag-domain>/88/tag.min.js
-NEXT_PUBLIC_MONETAG_ZONE=<zone-id>
+NEXT_PUBLIC_ADSTERRA_SKYSCRAPER=https://<publisher-domain>/22/<160x600-key>
 
 # Optional. NEXT_PUBLIC_SITE_URL overrides the origin used for canonical links
 # and the sitemap, which a custom domain needs; without it Vercel's production
@@ -139,19 +137,13 @@ Keys stay out of the repo because this one is public: a key pasted onto a spam
 site gets the publisher account banned, not the thief. Unset — the default
 locally — the page renders ad-free.
 
-The two display banners are one unit per size, because Adsterra has no
-responsive banner. The slot loads only the one matching the viewport: both
-rendered with one hidden would still load it and bill an impression nobody
-could see, which is how publisher accounts get closed. The social bar and the
-popunder attach to the whole page instead of a slot, so they live in the
-layout. The popunder answers a click anywhere with another site, which is worth
-knowing before it is switched on.
-
-Adsterra and Monetag run side by side; neither demands exclusivity. The one
-overlap to watch is the popunder — Adsterra has one and the Monetag zone may run
-one too, so a single click could open two windows. Turn the popunder off in one
-of them (either unset NEXT_PUBLIC_ADSTERRA_POPUNDER, or disable that format on
-the Monetag zone).
+Each banner renders in its own iframe, so a page can carry more than one: the
+loader keys off a single global, and injecting two into the page itself would
+leave the second overwriting the first. The display banner picks one size per
+viewport (728x90 or 320x50 — Adsterra has no responsive unit), and the 160x600
+skyscraper fills the side gutters on wide screens. The social bar attaches to
+the whole page, so it lives in the layout. There is no popunder: it opened
+another site on any click, which on a tool reads as the page breaking.
 
 Ads serve only on a domain Adsterra has approved, and the loader domains are
 widely blocked by adblockers and some ISPs, so an empty slot locally usually

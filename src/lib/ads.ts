@@ -57,20 +57,8 @@ export const NATIVE_AD = nativeSrc && nativeKey ? { src: nativeSrc, key: nativeK
  *
  * The popunder used to be here and is gone for good: it opened another site on
  * any click anywhere on the page, which on a tool reads as the page breaking
- * rather than as an ad. Monetag can run the same format from its own tag, so
- * that one is turned off on the Monetag side, not here.
+ * rather than as an ad.
  */
 export const SITEWIDE_AD_SRCS = [process.env.NEXT_PUBLIC_ADSTERRA_SOCIAL_BAR].filter(
   (src): src is string => Boolean(src),
 );
-
-/**
- * Monetag's Multitag — one loader that runs several Monetag formats at once
- * (push via the /sw.js at the site root, plus whatever else the zone has
- * enabled in the dashboard). Which formats it runs is set on Monetag's side,
- * not here. Unlike the units above it carries a zone id as an attribute rather
- * than in the URL, so it is its own value, not a member of SITEWIDE_AD_SRCS.
- */
-const monetagSrc = process.env.NEXT_PUBLIC_MONETAG_SRC;
-const monetagZone = process.env.NEXT_PUBLIC_MONETAG_ZONE;
-export const MONETAG = monetagSrc && monetagZone ? { src: monetagSrc, zone: monetagZone } : null;
