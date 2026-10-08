@@ -1,26 +1,27 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { documentFor } from "@/components/ad-slot";
+import { useLazyAd } from "@/lib/use-lazy-ad";
 import type { AdUnit } from "@/lib/ads";
 
 /**
  * A skyscraper banner fixed in a side gutter.
  *
- * Only shown from the 2xl breakpoint up: at 1536px the centred content is 1152px
- * wide, leaving ~192px each side, enough for a 160px rail with a margin and no
- * overlap. Below that the gutters are too narrow, so the rails are hidden rather
- * than allowed to sit on top of the page. Each rail is its own iframe, so the
- * same unit can fill both without the shared-atOptions collision.
+ * Shown only from the 2xl breakpoint up, where the centred content leaves ~192px
+ * each side — room for a 160px rail without overlap. Below that the gutters are
+ * too narrow, so the rails are hidden. Each rail is its own iframe, so one unit
+ * fills both without the shared-atOptions collision, and the srcdoc is set only
+ * once the page has loaded so a slow ad domain cannot delay it.
  */
 export function SideRail({ unit, side }: { unit: AdUnit; side: "left" | "right" }) {
-  const frameRef = useRef<HTMLIFrameElement>(null);
+  const { ref, ready } = useLazyAd<HTMLIFrameElement>();
 
   useEffect(() => {
-    const frame = frameRef.current;
-    if (frame) frame.srcdoc = documentFor(unit);
-  }, [unit]);
+    const frame = ref.current;
+    if (ready && frame) frame.srcdoc = documentFor(unit);
+  }, [ready, unit, ref]);
 
   return (
     <aside
@@ -34,7 +35,7 @@ export function SideRail({ unit, side }: { unit: AdUnit; side: "left" | "right" 
         Advertisement
       </span>
       <iframe
-        ref={frameRef}
+        ref={ref}
         title="Advertisement"
         scrolling="no"
         className="h-[600px] w-[160px] border-0"

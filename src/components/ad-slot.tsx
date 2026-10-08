@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { cn } from "@/lib/utils";
+import { useLazyAd } from "@/lib/use-lazy-ad";
 import type { AdUnit } from "@/lib/ads";
 
 type AdSlotProps = {
@@ -34,25 +35,22 @@ export function documentFor(unit: AdUnit): string {
 /**
  * One Adsterra display banner, each in its own iframe.
  *
- * The loader reads a single global `atOptions`, so injecting two banners into
- * the page itself would leave the second overwriting the first's config and one
- * of them blank. Giving each its own iframe gives each its own window and its
- * own global, which is what lets more than one banner sit on a page. The iframe
- * is `srcdoc`, so it keeps the page's origin — Adsterra still sees the approved
- * domain as the referrer.
- *
- * Only the unit matching the viewport is loaded; rendering both and hiding one
- * would still bill an impression nobody could see.
+ * Each banner gets its own iframe because the loader reads a single global
+ * `atOptions`; injecting two into the page itself would leave the second
+ * overwriting the first and one of them blank. srcdoc keeps the page's origin,
+ * so Adsterra still sees the approved domain. The srcdoc is set only once the
+ * slot is ready (page loaded, near the viewport), so a blocked or slow ad
+ * domain never holds up the app. Only the unit matching the viewport loads.
  */
 export function AdSlot({ wide, narrow, className }: AdSlotProps) {
-  const frameRef = useRef<HTMLIFrameElement>(null);
+  const { ref, ready } = useLazyAd<HTMLIFrameElement>();
 
   useEffect(() => {
-    const frame = frameRef.current;
-    if (!frame) return;
+    const frame = ref.current;
+    if (!ready || !frame) return;
     const unit = window.matchMedia(WIDE_FROM).matches ? wide : narrow;
     frame.srcdoc = documentFor(unit);
-  }, [wide, narrow]);
+  }, [ready, wide, narrow, ref]);
 
   return (
     <aside aria-label="Advertisement" className={cn("flex flex-col items-center gap-2", className)}>
@@ -60,9 +58,9 @@ export function AdSlot({ wide, narrow, className }: AdSlotProps) {
         Advertisement
       </span>
       {/* Box reserved at both sizes so the banner cannot shift the page under
-          someone once the srcdoc resolves after hydration. */}
+          someone once the srcdoc resolves. */}
       <iframe
-        ref={frameRef}
+        ref={ref}
         title="Advertisement"
         scrolling="no"
         className="h-[50px] w-[320px] max-w-full border-0 md:h-[90px] md:w-[728px]"

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
+import { useLazyAd } from "@/lib/use-lazy-ad";
 
 type NativeAdProps = {
   /** Adsterra unit key; the loader looks for `container-<key>` to fill. */
@@ -12,17 +13,20 @@ type NativeAdProps = {
 
 /**
  * Adsterra's native banner: a loader that finds its own container by id and
- * renders cards into it, so unlike the display banner there is no size to
- * declare and nothing to reserve — it sizes itself to the column it sits in.
+ * renders cards into it, so there is no size to declare — it sizes itself to
+ * the column it sits in. The loader is appended only once the slot is ready
+ * (page loaded, near the viewport), so a blocked ad domain never delays the app
+ * and an off-screen native never fetches until scrolled to.
  */
 export function NativeAd({ adKey, src, className }: NativeAdProps) {
-  const holderRef = useRef<HTMLDivElement>(null);
+  const { ref, ready } = useLazyAd<HTMLElement>();
   const containerRef = useRef<HTMLDivElement>(null);
+  const holderRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const holder = holderRef.current;
     const container = containerRef.current;
-    if (!holder) return;
+    if (!ready || !holder) return;
 
     const loader = document.createElement("script");
     loader.src = src;
@@ -38,10 +42,10 @@ export function NativeAd({ adKey, src, className }: NativeAdProps) {
       holder.replaceChildren();
       container?.replaceChildren();
     };
-  }, [src]);
+  }, [ready, src]);
 
   return (
-    <aside aria-label="Advertisement" className={cn("w-full", className)}>
+    <aside ref={ref} aria-label="Advertisement" className={cn("w-full", className)}>
       <span className="mb-2 block text-center text-[10px] uppercase tracking-[0.12em] text-muted-foreground/60">
         Advertisement
       </span>
