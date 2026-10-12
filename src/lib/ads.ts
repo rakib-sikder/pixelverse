@@ -66,19 +66,27 @@ export const RAIL_UNITS: AdUnit[] = halfRail
  */
 export const RECTANGLE_AD = unit(process.env.NEXT_PUBLIC_ADSTERRA_RECTANGLE, 300, 250);
 
+/** 468x60, for the break under the conversion list, where 728x90 is too wide. */
+export const SMALL_BANNER_AD = unit(process.env.NEXT_PUBLIC_ADSTERRA_BANNER_SMALL, 468, 60);
+
 /** Native banner. Its loader fills a div whose id is the unit key, prefixed. */
 const nativeSrc = process.env.NEXT_PUBLIC_ADSTERRA_NATIVE;
 const nativeKey = nativeSrc && keyOf(nativeSrc);
 export const NATIVE_AD = nativeSrc && nativeKey ? { src: nativeSrc, key: nativeKey } : null;
 
 /**
- * Units that attach to the whole page rather than to a slot in it — now just
- * the social bar, which floats over the layout.
+ * Units that attach to the whole page rather than to a slot in it: the social
+ * bar and the in-page push float over the layout, and the popunder opens its
+ * own window.
  *
- * The popunder used to be here and is gone for good: it opened another site on
- * any click anywhere on the page, which on a tool reads as the page breaking
- * rather than as an ad.
+ * The popunder was taken out once, for opening another site on any click
+ * anywhere on the page — on a tool that reads as the page breaking rather than
+ * as an ad. It is back because the site's owner asked for it. Clearing
+ * NEXT_PUBLIC_ADSTERRA_POPUNDER turns it off again without a deploy, which is
+ * the knob to reach for if the bounce rate answers the question.
  */
-export const SITEWIDE_AD_SRCS = [process.env.NEXT_PUBLIC_ADSTERRA_SOCIAL_BAR].filter(
-  (src): src is string => Boolean(src),
-);
+export const SITEWIDE_AD_SRCS = [
+  process.env.NEXT_PUBLIC_ADSTERRA_SOCIAL_BAR,
+  process.env.NEXT_PUBLIC_ADSTERRA_INPAGE,
+  process.env.NEXT_PUBLIC_ADSTERRA_POPUNDER,
+].filter((src): src is string => Boolean(src));

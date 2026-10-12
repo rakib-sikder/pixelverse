@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { BannerBreak, NativeBreak } from "@/components/ad-break";
+import { BannerBreak, NativeBreak, SmallBannerBreak } from "@/components/ad-break";
 import { AnchorAd, AnchorAdSpacer } from "@/components/anchor-ad";
 import { Converter } from "@/components/converter";
 import { CONVERSIONS } from "@/lib/conversions";
@@ -66,6 +66,10 @@ export default function Home() {
           lower half, and the native banner is the unit that fills it without
           reading as a billboard. One native per page — the loader fills a
           container keyed by the unit id, so a second would leave both empty. */}
+      {/* Narrower than the display banner so it reads as a break between the
+          list and the native unit rather than a second billboard. */}
+      <SmallBannerBreak className="mt-10" />
+
       <NativeBreak className="mt-16" />
 
       <AnchorAdSpacer />
