@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { documentFor } from "@/components/ad-slot";
 import { useLazyAd } from "@/lib/use-lazy-ad";
-import { RAIL_UNITS, type AdUnit } from "@/lib/ads";
+import { RAIL_AD, type AdUnit } from "@/lib/ads";
 
 /**
  * A skyscraper banner fixed in a side gutter.
@@ -35,7 +35,7 @@ function RailFrame({ unit }: { unit: AdUnit }) {
 }
 
 export function FlankRail() {
-  if (RAIL_UNITS.length === 0) return null;
+  if (!RAIL_AD) return null;
   return (
     <aside
       aria-label="Advertisement"
@@ -44,7 +44,7 @@ export function FlankRail() {
       <span className="text-[10px] uppercase tracking-[0.12em] text-muted-foreground/60">
         Advertisement
       </span>
-      <RailFrame unit={RAIL_UNITS[0]} />
+      <RailFrame unit={RAIL_AD} />
     </aside>
   );
 }
