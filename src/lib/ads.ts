@@ -47,17 +47,22 @@ export const BANNER_ADS = wide && narrow ? { wide, narrow } : null;
 export const SKYSCRAPER_AD = unit(process.env.NEXT_PUBLIC_ADSTERRA_SKYSCRAPER, 160, 600);
 
 /**
- * The half-height rail. Two of these stacked occupy the gutter one skyscraper
- * occupies, and two units in a gutter is two impressions rather than one, so
- * the rails prefer it. Same 160px width, so the breakpoint maths is unchanged.
+ * The half-height rail, for the flanks either side of the empty-state dropzone.
+ * A 600px unit there would set the height of that whole row and push the slot
+ * below it under the fold, which is the opposite of the point.
  */
-const halfRail = unit(process.env.NEXT_PUBLIC_ADSTERRA_RAIL, 160, 300);
+export const RAIL_AD = unit(process.env.NEXT_PUBLIC_ADSTERRA_RAIL, 160, 300);
 
-/** What one gutter holds, top to bottom. Empty when neither unit is set. */
-export const RAIL_UNITS: AdUnit[] = halfRail
-  ? [halfRail, halfRail]
-  : SKYSCRAPER_AD
-    ? [SKYSCRAPER_AD]
+/**
+ * What one viewport gutter holds, top to bottom. The skyscraper is the unit cut
+ * for that column, so it gets it; two half rails stand in when it is the only
+ * one configured. Both are 160px wide, so the breakpoint maths is the same
+ * either way.
+ */
+export const RAIL_UNITS: AdUnit[] = SKYSCRAPER_AD
+  ? [SKYSCRAPER_AD]
+  : RAIL_AD
+    ? [RAIL_AD, RAIL_AD]
     : [];
 
 /**
