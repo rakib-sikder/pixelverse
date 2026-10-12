@@ -8,7 +8,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { SideRail } from "@/components/side-rail";
 import { ServiceWorkerCleanup } from "@/components/service-worker-cleanup";
 import { SiteHeader } from "@/components/site-header";
-import { SITEWIDE_AD_SRCS, SKYSCRAPER_AD } from "@/lib/ads";
+import { RAIL_UNITS, SITEWIDE_AD_SRCS } from "@/lib/ads";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
@@ -71,10 +71,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <ServiceWorkerCleanup />
         {/* Skyscrapers in the wide-screen side gutters; hidden where there is no
             room. One unit, two iframes. */}
-        {SKYSCRAPER_AD && (
+        {RAIL_UNITS.length > 0 && (
           <>
-            <SideRail unit={SKYSCRAPER_AD} side="left" />
-            <SideRail unit={SKYSCRAPER_AD} side="right" />
+            <SideRail units={RAIL_UNITS} side="left" />
+            <SideRail units={RAIL_UNITS} side="right" />
           </>
         )}
         <TooltipProvider delay={200}>

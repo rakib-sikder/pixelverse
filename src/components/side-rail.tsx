@@ -4,24 +4,53 @@ import { useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { documentFor } from "@/components/ad-slot";
 import { useLazyAd } from "@/lib/use-lazy-ad";
-import type { AdUnit } from "@/lib/ads";
+import { RAIL_UNITS, type AdUnit } from "@/lib/ads";
 
 /**
  * A skyscraper banner fixed in a side gutter.
  *
- * Shown only from the 2xl breakpoint up, where the centred content leaves ~192px
- * each side — room for a 160px rail without overlap. Below that the gutters are
- * too narrow, so the rails are hidden. Each rail is its own iframe, so one unit
- * fills both without the shared-atOptions collision, and the srcdoc is set only
- * once the page has loaded so a slow ad domain cannot delay it.
+ * Shown from 2xl up, the first width where the centred column leaves the 176px
+ * a 160px rail plus its offset needs. Narrower than that the viewport gutters
+ * are too thin and the flanks beside the dropzone carry the rail instead. Every frame is its own iframe, so one unit
+ * can fill all of them without the shared-atOptions collision, and each srcdoc
+ * is set only once the page has loaded so a slow ad domain cannot delay it.
  */
-export function SideRail({ unit, side }: { unit: AdUnit; side: "left" | "right" }) {
+function RailFrame({ unit }: { unit: AdUnit }) {
   const { ref, ready } = useLazyAd<HTMLIFrameElement>();
 
   useEffect(() => {
     const frame = ref.current;
     if (ready && frame) frame.srcdoc = documentFor(unit);
   }, [ready, unit, ref]);
+
+  return (
+    <iframe
+      ref={ref}
+      title="Advertisement"
+      scrolling="no"
+      style={{ height: unit.height, width: unit.width }}
+      className="border-0"
+    />
+  );
+}
+
+export function FlankRail() {
+  if (RAIL_UNITS.length === 0) return null;
+  return (
+    <aside
+      aria-label="Advertisement"
+      className="hidden shrink-0 flex-col items-center gap-2 lg:flex"
+    >
+      <span className="text-[10px] uppercase tracking-[0.12em] text-muted-foreground/60">
+        Advertisement
+      </span>
+      <RailFrame unit={RAIL_UNITS[0]} />
+    </aside>
+  );
+}
+
+export function SideRail({ units, side }: { units: AdUnit[]; side: "left" | "right" }) {
+  if (units.length === 0) return null;
 
   return (
     <aside
@@ -34,12 +63,9 @@ export function SideRail({ unit, side }: { unit: AdUnit; side: "left" | "right" 
       <span className="text-[10px] uppercase tracking-[0.12em] text-muted-foreground/60">
         Advertisement
       </span>
-      <iframe
-        ref={ref}
-        title="Advertisement"
-        scrolling="no"
-        className="h-[600px] w-[160px] border-0"
-      />
+      {units.map((unit, i) => (
+        <RailFrame key={i} unit={unit} />
+      ))}
     </aside>
   );
 }

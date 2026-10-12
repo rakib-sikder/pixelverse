@@ -117,6 +117,11 @@ NEXT_PUBLIC_ADSTERRA_BANNER_NARROW=https://<publisher-domain>/22/<320x50-key>
 NEXT_PUBLIC_ADSTERRA_NATIVE=https://<publisher-domain>/21/<key>
 NEXT_PUBLIC_ADSTERRA_SOCIAL_BAR=https://<publisher-domain>/1/<key>
 NEXT_PUBLIC_ADSTERRA_SKYSCRAPER=https://<publisher-domain>/22/<160x600-key>
+NEXT_PUBLIC_ADSTERRA_RAIL=https://<publisher-domain>/22/<160x300-key>
+NEXT_PUBLIC_ADSTERRA_RECTANGLE=https://<publisher-domain>/22/<300x250-key>
+NEXT_PUBLIC_ADSTERRA_BANNER_SMALL=https://<publisher-domain>/22/<468x60-key>
+NEXT_PUBLIC_ADSTERRA_INPAGE=https://<publisher-domain>/14/<key>
+NEXT_PUBLIC_ADSTERRA_POPUNDER=https://<publisher-domain>/4/<key>
 
 # Optional. NEXT_PUBLIC_SITE_URL overrides the origin used for canonical links
 # and the sitemap, which a custom domain needs; without it Vercel's production
@@ -141,9 +146,11 @@ Each banner renders in its own iframe, so a page can carry more than one: the
 loader keys off a single global, and injecting two into the page itself would
 leave the second overwriting the first. The display banner picks one size per
 viewport (728x90 or 320x50 — Adsterra has no responsive unit), and the 160x600
-skyscraper fills the side gutters on wide screens. The social bar attaches to
-the whole page, so it lives in the layout. There is no popunder: it opened
-another site on any click, which on a tool reads as the page breaking.
+skyscraper fills the side gutters on wide screens. The social bar, the in-page push and the
+popunder attach to the whole page, so they live in the layout. The popunder is
+off unless its variable is set — it opens another site on any click, which on a
+tool reads as the page breaking, so it is the first one to clear if the bounce
+rate moves.
 
 Ads serve only on a domain Adsterra has approved, and the loader domains are
 widely blocked by adblockers and some ISPs, so an empty slot locally usually

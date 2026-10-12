@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { BannerBreak, NativeBreak } from "@/components/ad-break";
+import { BannerBreak, NativeBreak, SmallBannerBreak } from "@/components/ad-break";
+import { AnchorAd, AnchorAdSpacer } from "@/components/anchor-ad";
 import { Converter } from "@/components/converter";
 import { CONVERSIONS } from "@/lib/conversions";
 
@@ -11,21 +12,28 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-10">
-      <div className="mb-10 space-y-3 text-center">
-        <h1 className="text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
+    <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-5 sm:py-6">
+      <div className="mb-4 space-y-2 text-center">
+        <h1 className="text-2xl font-semibold tracking-tight text-balance sm:text-3xl">
           Convert any image to any format
         </h1>
-        <p className="mx-auto max-w-xl text-pretty text-muted-foreground">
+        <p className="mx-auto hidden max-w-2xl text-sm text-pretty text-muted-foreground sm:block">
           JPEG, PNG, WebP, AVIF, JPEG&nbsp;XL, HEIC, GIF, BMP, TIFF, ICO and SVG. Batch convert,
-          resize and compress — all of it running in your browser, with no upload and no size
-          limit.
+          resize and compress — all of it running in your browser, with no upload and no size limit.
         </p>
       </div>
 
-      <Converter />
+      {/* The one slot a visitor sees without scrolling, on a laptop and on a
+          phone. It sits above the converter rather than below it because the
+          hero and the dropzone are now short enough to leave room, and a slot
+          under the fold on a phone is a slot nobody sees. */}
+      <BannerBreak className="mb-6" />
 
-      <BannerBreak className="mt-12" />
+      {/* Attention peaks between the "it worked" line and the download button,
+          which is what the converter exposes this slot for. */}
+      <Converter afterResults={<BannerBreak className="mt-4" />} />
+
+      <BannerBreak className="mt-8" />
 
       <section className="mt-16">
         <h2 className="text-xl font-semibold tracking-tight">Common conversions</h2>
@@ -58,7 +66,14 @@ export default function Home() {
           lower half, and the native banner is the unit that fills it without
           reading as a billboard. One native per page — the loader fills a
           container keyed by the unit id, so a second would leave both empty. */}
+      {/* Narrower than the display banner so it reads as a break between the
+          list and the native unit rather than a second billboard. */}
+      <SmallBannerBreak className="mt-10" />
+
       <NativeBreak className="mt-16" />
+
+      <AnchorAdSpacer />
+      <AnchorAd />
     </main>
   );
 }

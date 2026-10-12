@@ -11,6 +11,8 @@ type AdSlotProps = {
   /** Loaded below `md`. */
   narrow: AdUnit;
   className?: string;
+  /** Keeps the caption for screen readers but out of the layout. */
+  hideLabel?: boolean;
 };
 
 /** Tailwind's `md`, repeated here because the box is reserved in CSS. */
@@ -33,6 +35,35 @@ export function documentFor(unit: AdUnit): string {
 }
 
 /**
+ * A slot that always serves the same unit, whatever the viewport. The display
+ * banner has to pick a size per breakpoint because Adsterra has no responsive
+ * unit; a rectangle that only ever appears in one column does not.
+ */
+export function SingleAdSlot({ unit, className }: { unit: AdUnit; className?: string }) {
+  const { ref, ready } = useLazyAd<HTMLIFrameElement>();
+
+  useEffect(() => {
+    const frame = ref.current;
+    if (ready && frame) frame.srcdoc = documentFor(unit);
+  }, [ready, unit, ref]);
+
+  return (
+    <aside aria-label="Advertisement" className={cn("flex flex-col items-center gap-2", className)}>
+      <span className="text-[10px] uppercase tracking-[0.12em] text-muted-foreground/60">
+        Advertisement
+      </span>
+      <iframe
+        ref={ref}
+        title="Advertisement"
+        scrolling="no"
+        style={{ height: unit.height, width: unit.width }}
+        className="max-w-full border-0"
+      />
+    </aside>
+  );
+}
+
+/**
  * One Adsterra display banner, each in its own iframe.
  *
  * Each banner gets its own iframe because the loader reads a single global
@@ -42,7 +73,7 @@ export function documentFor(unit: AdUnit): string {
  * slot is ready (page loaded, near the viewport), so a blocked or slow ad
  * domain never holds up the app. Only the unit matching the viewport loads.
  */
-export function AdSlot({ wide, narrow, className }: AdSlotProps) {
+export function AdSlot({ wide, narrow, className, hideLabel }: AdSlotProps) {
   const { ref, ready } = useLazyAd<HTMLIFrameElement>();
 
   useEffect(() => {
@@ -54,7 +85,12 @@ export function AdSlot({ wide, narrow, className }: AdSlotProps) {
 
   return (
     <aside aria-label="Advertisement" className={cn("flex flex-col items-center gap-2", className)}>
-      <span className="text-[10px] uppercase tracking-[0.12em] text-muted-foreground/60">
+      <span
+        className={cn(
+          "text-[10px] uppercase tracking-[0.12em] text-muted-foreground/60",
+          hideLabel && "sr-only",
+        )}
+      >
         Advertisement
       </span>
       {/* Box reserved at both sizes so the banner cannot shift the page under
