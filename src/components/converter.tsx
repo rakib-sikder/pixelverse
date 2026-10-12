@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Dropzone } from "@/components/dropzone";
+import { RectangleBreak } from "@/components/ad-break";
+import { FlankRail } from "@/components/side-rail";
 import { FileCard } from "@/components/file-card";
 import { SettingsPanel } from "@/components/settings-panel";
 import { downloadZip } from "@/lib/download";
@@ -86,8 +88,12 @@ export function Converter({ target, afterResults }: ConverterProps = {}) {
 
   if (items.length === 0) {
     return (
-      <div className="mx-auto w-full max-w-3xl">
-        <Dropzone onFiles={onFiles} compact={false} />
+      <div className="flex w-full items-start justify-center gap-4">
+        <FlankRail />
+        <div className="min-w-0 max-w-2xl flex-1">
+          <Dropzone onFiles={onFiles} compact={false} />
+        </div>
+        <FlankRail />
       </div>
     );
   }
@@ -119,53 +125,58 @@ export function Converter({ target, afterResults }: ConverterProps = {}) {
         {done.length > 0 ? afterResults : null}
       </div>
 
-      {/* Sticky so the settings stay reachable while scrolling a long queue. */}
-      <Card className="lg:sticky lg:top-6">
-        <CardContent className="space-y-6">
-          <SettingsPanel />
+      {/* Sticky so the settings — and the unit under them — stay on screen
+          while a long queue scrolls past. */}
+      <div className="space-y-4 lg:sticky lg:top-6">
+        <Card>
+          <CardContent className="space-y-6">
+            <SettingsPanel />
 
-          <Separator />
+            <Separator />
 
-          <div className="space-y-2">
-            <Button
-              className="w-full"
-              size="lg"
-              onClick={handleConvert}
-              disabled={isConverting || convertible.length === 0}
-            >
-              {isConverting ? (
-                <Loader2 className="size-4 animate-spin" />
-              ) : (
-                <Sparkles className="size-4" />
-              )}
-              {isConverting
-                ? "Converting…"
-                : `Convert ${convertible.length} ${convertible.length === 1 ? "image" : "images"}`}
-            </Button>
-
-            {done.length > 1 ? (
+            <div className="space-y-2">
               <Button
-                variant="outline"
                 className="w-full"
-                onClick={handleDownloadAll}
-                disabled={isZipping}
+                size="lg"
+                onClick={handleConvert}
+                disabled={isConverting || convertible.length === 0}
               >
-                {isZipping ? (
+                {isConverting ? (
                   <Loader2 className="size-4 animate-spin" />
                 ) : (
-                  <Download className="size-4" />
+                  <Sparkles className="size-4" />
                 )}
-                Download all as ZIP
+                {isConverting
+                  ? "Converting…"
+                  : `Convert ${convertible.length} ${convertible.length === 1 ? "image" : "images"}`}
               </Button>
-            ) : null}
 
-            <Button variant="ghost" className="w-full" onClick={clearAll} disabled={isConverting}>
-              <Trash2 className="size-4" />
-              Clear queue
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+              {done.length > 1 ? (
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={handleDownloadAll}
+                  disabled={isZipping}
+                >
+                  {isZipping ? (
+                    <Loader2 className="size-4 animate-spin" />
+                  ) : (
+                    <Download className="size-4" />
+                  )}
+                  Download all as ZIP
+                </Button>
+              ) : null}
+
+              <Button variant="ghost" className="w-full" onClick={clearAll} disabled={isConverting}>
+                <Trash2 className="size-4" />
+                Clear queue
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        <RectangleBreak />
+      </div>
     </div>
   );
 }

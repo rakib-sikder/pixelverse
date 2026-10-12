@@ -1,6 +1,6 @@
-import { AdSlot } from "@/components/ad-slot";
+import { AdSlot, SingleAdSlot } from "@/components/ad-slot";
 import { NativeAd } from "@/components/native-ad";
-import { BANNER_ADS, NATIVE_AD } from "@/lib/ads";
+import { BANNER_ADS, NATIVE_AD, RECTANGLE_AD } from "@/lib/ads";
 
 /**
  * The two placed units, each wrapped so a page can drop one in without
@@ -10,6 +10,11 @@ import { BANNER_ADS, NATIVE_AD } from "@/lib/ads";
 export function BannerBreak({ className }: { className?: string }) {
   if (!BANNER_ADS) return null;
   return <AdSlot wide={BANNER_ADS.wide} narrow={BANNER_ADS.narrow} className={className} />;
+}
+
+export function RectangleBreak({ className }: { className?: string }) {
+  if (!RECTANGLE_AD) return null;
+  return <SingleAdSlot unit={RECTANGLE_AD} className={className} />;
 }
 
 export function NativeBreak({ className }: { className?: string }) {

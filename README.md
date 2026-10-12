@@ -117,6 +117,8 @@ NEXT_PUBLIC_ADSTERRA_BANNER_NARROW=https://<publisher-domain>/22/<320x50-key>
 NEXT_PUBLIC_ADSTERRA_NATIVE=https://<publisher-domain>/21/<key>
 NEXT_PUBLIC_ADSTERRA_SOCIAL_BAR=https://<publisher-domain>/1/<key>
 NEXT_PUBLIC_ADSTERRA_SKYSCRAPER=https://<publisher-domain>/22/<160x600-key>
+NEXT_PUBLIC_ADSTERRA_RAIL=https://<publisher-domain>/22/<160x300-key>
+NEXT_PUBLIC_ADSTERRA_RECTANGLE=https://<publisher-domain>/22/<300x250-key>
 
 # Optional. NEXT_PUBLIC_SITE_URL overrides the origin used for canonical links
 # and the sitemap, which a custom domain needs; without it Vercel's production

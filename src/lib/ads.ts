@@ -46,6 +46,26 @@ export const BANNER_ADS = wide && narrow ? { wide, narrow } : null;
  */
 export const SKYSCRAPER_AD = unit(process.env.NEXT_PUBLIC_ADSTERRA_SKYSCRAPER, 160, 600);
 
+/**
+ * The half-height rail. Two of these stacked occupy the gutter one skyscraper
+ * occupies, and two units in a gutter is two impressions rather than one, so
+ * the rails prefer it. Same 160px width, so the breakpoint maths is unchanged.
+ */
+const halfRail = unit(process.env.NEXT_PUBLIC_ADSTERRA_RAIL, 160, 300);
+
+/** What one gutter holds, top to bottom. Empty when neither unit is set. */
+export const RAIL_UNITS: AdUnit[] = halfRail
+  ? [halfRail, halfRail]
+  : SKYSCRAPER_AD
+    ? [SKYSCRAPER_AD]
+    : [];
+
+/**
+ * Medium rectangle for the settings column, which is sticky — it is the one
+ * slot that stays on screen for as long as someone watches a queue convert.
+ */
+export const RECTANGLE_AD = unit(process.env.NEXT_PUBLIC_ADSTERRA_RECTANGLE, 300, 250);
+
 /** Native banner. Its loader fills a div whose id is the unit key, prefixed. */
 const nativeSrc = process.env.NEXT_PUBLIC_ADSTERRA_NATIVE;
 const nativeKey = nativeSrc && keyOf(nativeSrc);

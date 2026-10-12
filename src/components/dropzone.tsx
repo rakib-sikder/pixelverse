@@ -65,7 +65,7 @@ export function Dropzone({ onFiles, compact }: DropzoneProps) {
       tabIndex={0}
       aria-label="Add images to convert"
       className={cn(
-        "flex cursor-pointer flex-col items-center justify-center gap-4 rounded-2xl border-2 border-dashed px-6 py-20 text-center transition-colors",
+        "flex cursor-pointer flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed px-6 py-5 text-center transition-colors sm:gap-4 sm:py-8",
         "focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none",
         isDragActive
           ? "border-primary bg-primary/5"
@@ -73,11 +73,11 @@ export function Dropzone({ onFiles, compact }: DropzoneProps) {
       )}
     >
       <input {...getInputProps()} />
-      <div className="rounded-full bg-muted p-4">
-        <ImagePlus className="size-7 text-muted-foreground" aria-hidden />
+      <div className="rounded-full bg-muted p-3">
+        <ImagePlus className="size-6 text-muted-foreground" aria-hidden />
       </div>
-      <div className="space-y-1.5">
-        <p className="text-lg font-medium">
+      <div className="space-y-1">
+        <p className="text-base font-medium sm:text-lg">
           {isDragActive ? "Drop them here" : "Drop images here"}
         </p>
         <p className="text-sm text-muted-foreground">
